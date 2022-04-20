@@ -9,4 +9,4 @@ doSomething((myvalue) => {
   console.log("myvalue = " + myvalue);
 });
 
-console.log("Nu zijn we hier");
+console.log("Nu zijn we hier!");
