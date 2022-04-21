@@ -8,9 +8,10 @@ app.use(bodyParser.json());
 let database = [];
 let id = 0;
 
+//logging any called methods
 app.all("*", (req, res, next) => {
   const method = req.method;
-  console.log(`Method ${method} is aangeroepen`);
+  console.log(`Method ${method} called`);
   next();
 });
 
@@ -21,48 +22,81 @@ app.get("/", (req, res) => {
   });
 });
 
-// l 
-
-app.post("/api/movie", (req, res) => {
-  let movie = req.body;
+//handling a post request for a new user
+app.post("/api/user", (req, res) => {
+  let user = req.body;
   id++;
-  movie = {
+  user = {
     id,
-    ...movie,
+    ...user,
   };
-  console.log(movie);
-  database.push(movie);
+  console.log(user);
+  database.push(user);
   res.status(201).json({
     status: 201,
     result: database,
   });
 });
 
-app.get("/api/movie/:movieId", (req, res, next) => {
-  const movieId = req.params.movieId;
-  console.log(`Movie met ID ${movieId} gezocht`);
-  let movie = database.filter((item) => item.id == movieId);
-  if (movie.length > 0) {
-    console.log(movie);
+//handling a get request for a user by userId
+app.get("/api/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+  console.log(`User with ID ${userId} requested`);
+  let user = database.filter((item) => item.id == userId);
+  if (user.length > 0) {
+    console.log(user);
     res.status(200).json({
       status: 200,
-      result: movie,
+      result: user,
     });
   } else {
     res.status(401).json({
       status: 401,
-      result: `Movie with ID ${movieId} not found`,
+      result: `User with ID ${userId} not found`,
     });
   }
 });
 
-app.get("/api/movie", (req, res, next) => {
+//deleting a user by userId
+app.delete("/api/user/:userId", (req, res, next) => {
+  const userId = req.params.userId;
+  console.log(`User with ID ${userId} requested to be deleted`);
+  let result = database.filter((item) => item.id == userId);
+  if (result.length > 0) {
+    let user = result[0];
+
+    const index = database.indexOf(user);
+    console.log(user);
+    if (index < 0) return;
+
+    database.splice(index, 1);
+
+    console.log(`User with ID ${userId} has been deleted`);
+    res.status(200).json({
+      status: 200,
+      result: user,
+    });
+  } else {
+    res.status(401).json({
+      status: 401,
+      result: `User with ID ${userId} not found, and couldnt be deleted`,
+    });
+  }
+})
+
+//getting all users
+app.get("/api/user", (req, res, next) => {
+  let user = req.body;
+  for(user of database){
+    console.log(user);
+  }
   res.status(200).json({
     status: 200,
     result: database,
   });
 });
 
+//error page not found
 app.all("*", (req, res) => {
   res.status(401).json({
     status: 401,
