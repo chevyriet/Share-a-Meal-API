@@ -98,6 +98,7 @@ app.delete("/api/user/:userId", (req, res, next) => {
 //updating a user by id
 app.put("/api/user/:userId", (req, res, next) => {
   const userId = req.params.userId;
+  const id = userId;
   const updateUser = req.body;
   console.log(`User with ID ${userId} requested to be updated`);
   let oldUser = database.filter((item) => item.id == userId);
