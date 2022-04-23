@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 });
 
 //getting a users profile, if it has a valid JWT token (endpoint not realized yet)
-app.all("/api/user/profile/*", (req, res) => {
+app.all("/api/user/profile", (req, res) => {
   res.status(401).json({
     status: 401,
     result: "Cant fetch user profile as this functionality has not been realized yet",
