@@ -16,7 +16,7 @@ router.get("/", (req, res) => {
 router.all("/api/user/profile",userController.getUserProfile);
 
 //handling a post request for a new user
-router.post("/api/user", userController.addUser);
+router.post("/api/user", userController.validateUser, userController.addUser);
 
 //getting a user by id
 router.get("/api/user/:userId", userController.getUserById);
