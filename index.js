@@ -35,3 +35,5 @@ app.use((err,req,res,next) => {
 app.listen(port, () => {
   console.log(`Share A Meal API app listening on port ${port}`);
 });
+
+module.exports = app;
