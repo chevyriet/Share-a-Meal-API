@@ -13,14 +13,15 @@ let controller={
             assert(typeof emailAdress === "string", "Emailadress must be a string");
             next();
         } catch(err){
-            console.log(err)
-            res.status(400).json({
+            const error={
                 status: 400,
-                result: err.toString(),
-            });
+                result: err.message
+            };
+
+            next(error);
         }
     },
-    addUser:(req,res)=>{
+    addUser:(req,res,next)=>{
         let user = req.body;
         let sameEmailUser = database.filter((item) => item.emailAdress == user.emailAdress);
         console.log(sameEmailUser);
@@ -36,10 +37,11 @@ let controller={
                 result: user,
             });
         } else {
-            res.status(401).json({
+            const error={
                 status: 401,
                 result: `Could not add user, a user with the following email already exists: ${user.emailAdress}`,
-            });
+            };
+            next(error);
         }
     },
     getAllUsers:(req,res)=>{
@@ -52,7 +54,7 @@ let controller={
             result: database,
         });
     },
-    getUserById:(req,res)=>{
+    getUserById:(req,res,next)=>{
         const userId = req.params.userId;
         console.log(`User with ID ${userId} requested`);
         let user = database.filter((item) => item.id == userId);
@@ -62,13 +64,14 @@ let controller={
             result: user,
         });
     } else {
-        res.status(401).json({
+        const error={
             status: 401,
             result: `User with ID ${userId} could not be found`,
-        });
+        };
+        next(error);
     }
     },
-    deleteUser:(req,res)=>{
+    deleteUser:(req,res,next)=>{
         const userId = req.params.userId;
         console.log(`User with ID ${userId} requested to be deleted`);
         let result = database.filter((item) => item.id == userId);
@@ -82,13 +85,14 @@ let controller={
                 result: `User with ID ${userId} has been deleted`,
             });
         } else {
-            res.status(401).json({
+            const error={
                 status: 401,
                 result: `User with ID ${userId} not found, and could not be deleted`,
-            });
+            };
+            next(error);
         }
     },
-    updateUser:(req,res)=>{
+    updateUser:(req,res,next)=>{
         const userId = req.params.userId;
         const id = userId;
         const updateUser = req.body;
@@ -106,17 +110,19 @@ let controller={
                 result: user,
             });
         } else {
-            res.status(401).json({
+            const error={
                 status: 401,
                 result: `User with ID ${userId} not found, and couldnt be updated`,
-            });
+            };
+            next(error);
         }
     },
-    getUserProfile:(req,res)=>{
-        res.status(401).json({
+    getUserProfile:(req,res,next)=>{
+        const error={
             status: 401,
             result: "Cant fetch user profile as this functionality has not been realized yet",
-        });
+        };
+        next(error);
     }
 }
 module.exports = controller;
