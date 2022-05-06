@@ -160,6 +160,6 @@ let controller={
             result: "Cant fetch user profile as this functionality has not been realized yet",
         };
         next(error);
-    }
+    },
 }
 module.exports = controller;
