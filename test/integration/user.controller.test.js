@@ -19,7 +19,7 @@ describe("Manage Users /api/user",() => {
                 lastName: "Rietveld",
                 street: "Van Wenastraat 31",
                 city: "Giessenburg",
-                password: "secret",
+                password: "berOertE5!",
                 emailAdress: "chevy@gmail.com"
             })
             .end((err,res) => {
