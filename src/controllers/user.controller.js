@@ -97,19 +97,13 @@ let controller={
             if (err) throw err; 
             console.log(query);
             connection.query(query, function (error, results, fields) {
+                if (error) throw error; 
                 connection.release();
-                if(results.length > 0){
-                    console.log('Amount of results: ',results.length);
-                    res.status(200).json({
+                console.log('Amount of results: ',results.length);
+                res.status(200).json({
                     status: 200,
                     result: results,
-                    });
-                } else {
-                    res.status(401).json({
-                        status: 401,
-                        result: `No users were found`
-                    })
-                }
+                });
             });
         });
     },
@@ -168,7 +162,7 @@ let controller={
         console.log(`User with ID ${userId} requested to be updated`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            connection.query('UPDATE user SET firstName=?, lastName=?, emailAdress=?, password=?, phoneNumber=?, street=?, city=? WHERE id = ?;', [updateUser.firstName, updateUser.lastName, updateUser.emailAdress, updateUser.password, updateUser.phoneNumber, updateUser.street, updateUser.city, userId], function (error, results, fields) {
+            connection.query('UPDATE user SET firstName=?, lastName=?, isActive=?, emailAdress=?, password=?, phoneNumber=?, street=?, city=? WHERE id = ?;', [updateUser.firstName, updateUser.lastName, updateUser.isActive, updateUser.emailAdress, updateUser.password, updateUser.phoneNumber, updateUser.street, updateUser.city, userId], function (error, results, fields) {
                 if(error){
                     res.status(401).json({
                         status: 401,

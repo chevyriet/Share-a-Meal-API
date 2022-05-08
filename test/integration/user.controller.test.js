@@ -261,6 +261,7 @@ describe("Manage Users /api/user",() => {
                 lastName: "Rietveld",
                 street: "Van Wenastraat 31",
                 city: "Giessenburg",
+                isActive: 0,
                 password: "wvqOertE5!",
                 phoneNumber: "0651160300",
                 emailAdress: "chevy@gmail.com"
@@ -273,7 +274,7 @@ describe("Manage Users /api/user",() => {
                     id: 2,                          
                     firstName: 'Chevy',             
                     lastName: 'Rietveld',           
-                    isActive: 1,                    
+                    isActive: 0,                    
                     emailAdress: 'chevy@gmail.com', 
                     password: 'wvqOertE5!',         
                     phoneNumber: '0651160300',      
@@ -286,7 +287,160 @@ describe("Manage Users /api/user",() => {
         });
     });
 
+    describe("UC-202 Overview of users/getting all users /api/user", ()=> {
+
+        it("TC-202-1 Anything that makes it so zero users result must return an empty list ", (done) => {
+            chai.request(server).get("/api/user?name=souhieu").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [])
+                done();
+            });
+        });
+
+        it("TC-202-2 Show two users", (done) => {
+            chai.request(server).get("/api/user").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        id: 1,
+                        firstName: 'Mariëtte',
+                        lastName: 'van den Dullemen',
+                        isActive: 1,
+                        emailAdress: 'm.vandullemen@server.nl',
+                        password: 'pfefejW41!',
+                        phoneNumber: '0687629321',
+                        roles: 'editor,guest',
+                        street: 'Groenstraat 10',
+                        city: 'Rotterdam',
+                    },
+                    {
+                        id: 2,                          
+                        firstName: 'Chevy',             
+                        lastName: 'Rietveld',           
+                        isActive: 0,                    
+                        emailAdress: 'chevy@gmail.com', 
+                        password: 'wvqOertE5!',         
+                        phoneNumber: '0651160300',      
+                        roles: 'editor,guest',          
+                        street: 'Van Wenastraat 31',    
+                        city: 'Giessenburg'  
+                    }
+                ])
+                done();
+            });
+        });
+
+        it("TC-202-3 Search for non-existing name while getting all users", (done) => {
+            chai.request(server).get("/api/user?name=sjjhekgrgr").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [])
+                done();
+            });
+        });
+
+        it("TC-202-4 Search for users with isActive=false", (done) => {
+            chai.request(server).get("/api/user?isActive=false").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        id: 2,                          
+                        firstName: 'Chevy',             
+                        lastName: 'Rietveld',           
+                        isActive: 0,                    
+                        emailAdress: 'chevy@gmail.com', 
+                        password: 'wvqOertE5!',         
+                        phoneNumber: '0651160300',      
+                        roles: 'editor,guest',          
+                        street: 'Van Wenastraat 31',    
+                        city: 'Giessenburg'
+                    }
+                ]);
+                done();
+            });
+        });
+
+        it("TC-202-5 Search for users with isActive=true", (done) => {
+            chai.request(server).get("/api/user?isActive=true").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        id: 1,
+                        firstName: 'Mariëtte',
+                        lastName: 'van den Dullemen',
+                        isActive: 1,
+                        emailAdress: 'm.vandullemen@server.nl',
+                        password: 'pfefejW41!',
+                        phoneNumber: '0687629321',
+                        roles: 'editor,guest',
+                        street: 'Groenstraat 10',
+                        city: 'Rotterdam',
+                    }
+                ]);
+                done();
+            });
+        });
+
+        it("TC-202-6 Search for users with existing name as searchterm", (done) => {
+            chai.request(server).get("/api/user?name=Chevy").send({
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        id: 2,                          
+                        firstName: 'Chevy',             
+                        lastName: 'Rietveld',           
+                        isActive: 0,                    
+                        emailAdress: 'chevy@gmail.com', 
+                        password: 'wvqOertE5!',         
+                        phoneNumber: '0651160300',      
+                        roles: 'editor,guest',          
+                        street: 'Van Wenastraat 31',    
+                        city: 'Giessenburg'
+                    }
+                ]);
+                done();
+            });
+        });
+    });
+
     describe("UC-206 Deleting a user /api/user", ()=> {
+
+        before((done) => {
+            dbconnection.getConnection(function(err, connection) {
+                if (err) throw err;
+                connection.query('DELETE FROM user;', (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
+                        connection.query('INSERT INTO user (id, firstName, lastName, street, city, isActive, emailAdress, password, phoneNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);', [1, 'Mariëtte', 'van den Dullemen', 'Groenstraat 10', 'Rotterdam' , 1, 'm.vandullemen@server.nl', 'pfefejW41!', '0687629321'], (error, result, field) => {
+                            connection.release();
+                            done();
+                        });
+                    });
+                });
+            });
+        });
 
         it("TC-206-1 User requested to be deleted doesnt exist", (done) => {
             chai.request(server).delete("/api/user/999")
@@ -301,7 +455,7 @@ describe("Manage Users /api/user",() => {
 
         //cant do this one yet as token/login function isnt implemented yet, so its told to be skipped
         xit("TC-206-2 User isnt logged in when trying to delete", (done) => {
-            chai.request(server).delete("/api/user/2")
+            chai.request(server).delete("/api/user/1")
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
@@ -313,7 +467,7 @@ describe("Manage Users /api/user",() => {
 
         //cant do this one yet as token/login function isnt implemented yet, so its told to be skipped
         xit("TC-206-3 User isnt the owner of the user they are trying to delete", (done) => {
-            chai.request(server).delete("/api/user/2")
+            chai.request(server).delete("/api/user/1")
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
@@ -324,40 +478,14 @@ describe("Manage Users /api/user",() => {
         });
 
         it("TC-206-4 User succesfully deleted", (done) => {
-            chai.request(server).delete("/api/user/2")
+            chai.request(server).delete("/api/user/1")
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
                 status.should.equals(200)
-                result.should.be.a("string").that.equals("User with ID 2 succesfully deleted");
+                result.should.be.a("string").that.equals("User with ID 1 succesfully deleted");
                 done();
             });
         });
     });
-
-    // describe("UC-202 Overview of users /api/user", ()=> {
-
-    //     before((done) => {
-    //         dbconnection.getConnection(function(err, connection) {
-    //             if (err) throw err;
-    //             connection.query('DELETE FROM user;', (error, result, field) => {
-    //                 connection.release();
-    //                 done();
-    //             });
-    //         });
-    //     });
-
-    //     it("TC-202-1 Show zero users must return an empty list ", (done) => {
-    //         chai.request(server).get("/api/user").send({
-    //         })
-    //         .end((err,res) => {
-    //             res.should.be.an("object")
-    //             let {status, result} = res.body;
-    //             status.should.equals(401)
-    //             result.should.be.a("string").that.equals("No users were found");
-    //             done();
-    //         });
-    //     });
-        
-    // });
 });
