@@ -71,9 +71,32 @@ let controller={
     },
     //UC-202: Get all users (not using token), also doesnt work with a search term yet like mentioned in FO
     getAllUsers:(req,res) => {
+        let query = 'SELECT * FROM user;';
+        if(/\?.+/.test(req.url)){ //checks if the url has any query parameters
+            const searchTerms = req.query;
+            const firstName = searchTerms.name
+            let isActive = searchTerms.isActive
+            if(isActive != undefined){
+                if(isActive == "true"){
+                    isActive=1;
+                } else {
+                    isActive=0;
+                }
+            }
+
+            //formats query based of given searchterms
+            if(firstName != undefined && isActive != undefined){
+                query = `SELECT * FROM user WHERE firstName = "${firstName}" AND isActive = ${isActive}`;
+            } else if (firstName == undefined && isActive != undefined){
+                query = `SELECT * FROM user WHERE isActive = ${isActive};`;
+            } else {
+                query = `SELECT * FROM user WHERE firstName = "${firstName}";`;
+            }
+        };
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            connection.query('SELECT * FROM user;', function (error, results, fields) {
+            console.log(query);
+            connection.query(query, function (error, results, fields) {
                 connection.release();
                 if(results.length > 0){
                     console.log('Amount of results: ',results.length);
