@@ -9,21 +9,27 @@ const { assert } = require("chai");
 chai.should();
 chai.use(chaiHttp);
 
-/**
- * Db queries to clear and fill the test database before each test.
- */
- const CLEAR_MEAL_TABLE = 'DELETE IGNORE FROM `meal`;'
- const CLEAR_PARTICIPANTS_TABLE = 'DELETE IGNORE FROM `meal_participants_user`;'
- const CLEAR_USERS_TABLE = 'DELETE IGNORE FROM `user`;'
- const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
+const CLEAR_MEAL_TABLE = 'DELETE FROM meal;'
+const CLEAR_PARTICIPANTS_TABLE = 'DELETE FROM meal_participants_user;'
+const CLEAR_USERS_TABLE = 'DELETE FROM user;'
+const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
+
 
 describe("Manage Users /api/user",() => {
+    
     before((done) => {
-        console.log(
-            CLEAR_DB,
-        )
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err;
+            connection.query('DELETE FROM meal;', function (error, result, field) {
+                connection.query('DELETE FROM meal_participants_user;', function (error, result, field) {
+                    connection.query('DELETE FROM user;', function (error, result, field) {
+                        connection.release();
+                        done();
+                    });
+                });
+            });
+        });
         console.log('before done')
-        done()
     })
 
     describe("UC-201 add users /api/user", ()=> {
