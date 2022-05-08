@@ -9,14 +9,9 @@ const { assert } = require("chai");
 chai.should();
 chai.use(chaiHttp);
 
-const CLEAR_MEAL_TABLE = 'DELETE FROM meal;'
-const CLEAR_PARTICIPANTS_TABLE = 'DELETE FROM meal_participants_user;'
-const CLEAR_USERS_TABLE = 'DELETE FROM user;'
-const CLEAR_DB = CLEAR_MEAL_TABLE + CLEAR_PARTICIPANTS_TABLE + CLEAR_USERS_TABLE
-
-
 describe("Manage Users /api/user",() => {
     
+    //completely empties database before starting with tests, so tests start with a clean database
     before((done) => {
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err;
