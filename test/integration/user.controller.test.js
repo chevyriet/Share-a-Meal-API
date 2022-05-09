@@ -127,7 +127,7 @@ describe("Manage Users /api/user",() => {
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
-                status.should.equals(201)
+                status.should.equals(200)
                 result.should.be.a("string").that.equals("User has been succesfully registered");
                 done();
             });
@@ -153,7 +153,7 @@ describe("Manage Users /api/user",() => {
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
-                status.should.equals(401)
+                status.should.equals(404)
                 result.should.be.a("string").that.equals("User with ID 356783 could not be found");
                 done();
             });

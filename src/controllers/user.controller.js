@@ -61,8 +61,8 @@ let controller={
                     })
                 } else {
                     connection.release();
-                    res.status(201).json({
-                        status: 201,
+                    res.status(200).json({
+                        status: 200,
                         result: `User has been succesfully registered`,
                     })
                 }
@@ -121,8 +121,8 @@ let controller={
                     result: results[0],
                     });
                 } else {
-                    res.status(401).json({
-                        status: 401,
+                    res.status(404).json({
+                        status: 404,
                         result: `User with ID ${userId} could not be found`
                     })
                 }
