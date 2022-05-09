@@ -109,7 +109,7 @@ describe("Manage Users /api/user",() => {
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
-                status.should.equals(401)
+                status.should.equals(409)
                 result.should.be.a("string").that.equals("Could not add user, the email has already been taken");
                 done();
             });
@@ -127,7 +127,7 @@ describe("Manage Users /api/user",() => {
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
-                status.should.equals(200)
+                status.should.equals(201)
                 result.should.be.a("string").that.equals("User has been succesfully registered");
                 done();
             });
@@ -447,7 +447,7 @@ describe("Manage Users /api/user",() => {
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
-                status.should.equals(404)
+                status.should.equals(400)
                 result.should.be.a("string").that.equals("User with ID 999 not found, and could not be deleted");
                 done();
             });

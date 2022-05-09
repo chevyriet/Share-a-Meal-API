@@ -55,14 +55,14 @@ let controller={
             connection.query('INSERT INTO user (firstName, lastName, street, city, phoneNumber, emailAdress, password) VALUES(?, ?, ?, ?, ?, ?, ?);', [user.firstName, user.lastName, user.street, user.city, user.phoneNumber, user.emailAdress, user.password], function (error, result, fields) {
                 if (error) {
                     connection.release();
-                    res.status(401).json({
-                        status: 401,
+                    res.status(409).json({
+                        status: 409,
                         result: `Could not add user, the email has already been taken`
                     })
                 } else {
                     connection.release();
-                    res.status(200).json({
-                        status: 200,
+                    res.status(201).json({
+                        status: 201,
                         result: `User has been succesfully registered`,
                     })
                 }
@@ -147,8 +147,8 @@ let controller={
                     result: `User with ID ${userId} succesfully deleted`,
                     });
                 } else {
-                    res.status(404).json({
-                        status: 404,
+                    res.status(400).json({
+                        status: 400,
                         result: `User with ID ${userId} not found, and could not be deleted`,
                     });
                 }
