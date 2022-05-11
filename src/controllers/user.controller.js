@@ -69,7 +69,7 @@ let controller={
             })
         })
     },
-    //UC-202: Get all users (not using token), also doesnt work with a search term yet like mentioned in FO
+    //UC-202: Get all users (not using token)
     getAllUsers:(req,res) => {
         let query = 'SELECT * FROM user;';
         if(/\?.+/.test(req.url)){ //checks if the url has any query parameters
