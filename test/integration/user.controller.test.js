@@ -137,16 +137,16 @@ describe("Manage Users /api/user",() => {
     describe("UC-204 Details of a user /api/user", ()=> {
         
         //cant do this one yet as token isnt implemented yet, so its told to be skipped
-        xit("TC-204-1 Invalid token when retrieving user details", (done) => {
-            chai.request(server).get("/api/user/")
-            .end((err,res) => {
-                res.should.be.an("object")
-                let {status, result} = res.body;
-                status.should.equals(401)
-                result.should.be.a("string").that.equals("Search failed as user token is invalid");
-                done();
-            });
-        });
+        // xit("TC-204-1 Invalid token when retrieving user details", (done) => {
+        //     chai.request(server).get("/api/user/")
+        //     .end((err,res) => {
+        //         res.should.be.an("object")
+        //         let {status, result} = res.body;
+        //         status.should.equals(401)
+        //         result.should.be.a("string").that.equals("Search failed as user token is invalid");
+        //         done();
+        //     });
+        // });
 
         it("TC-204-2 User ID doesnt exist", (done) => {
             chai.request(server).get("/api/user/356783")
@@ -242,18 +242,18 @@ describe("Manage Users /api/user",() => {
         });
 
         //cant do this one yet as token/login function isnt implemented yet, so its told to be skipped
-        xit("TC-205-5 User isnt logged in when trying to update", (done) => {
-            chai.request(server).put("/api/user/").send({
-                //
-            })
-            .end((err,res) => {
-                res.should.be.an("object")
-                let {status, result} = res.body;
-                status.should.equals(401)
-                result.should.be.a("string").that.equals("Cant update user, as you are not logged in");
-                done();
-            });
-        });
+        // xit("TC-205-5 User isnt logged in when trying to update", (done) => {
+        //     chai.request(server).put("/api/user/").send({
+        //         //
+        //     })
+        //     .end((err,res) => {
+        //         res.should.be.an("object")
+        //         let {status, result} = res.body;
+        //         status.should.equals(401)
+        //         result.should.be.a("string").that.equals("Cant update user, as you are not logged in");
+        //         done();
+        //     });
+        // });
 
         it("TC-205-6 User succesfully updated", (done) => {
             chai.request(server).put("/api/user/2").send({
@@ -454,28 +454,28 @@ describe("Manage Users /api/user",() => {
         });
 
         //cant do this one yet as token/login function isnt implemented yet, so its told to be skipped
-        xit("TC-206-2 User isnt logged in when trying to delete", (done) => {
-            chai.request(server).delete("/api/user/1")
-            .end((err,res) => {
-                res.should.be.an("object")
-                let {status, result} = res.body;
-                status.should.equals(401)
-                result.should.be.a("string").that.equals("Cant delete user, as you are not logged in");
-                done();
-            });
-        });
+        // xit("TC-206-2 User isnt logged in when trying to delete", (done) => {
+        //     chai.request(server).delete("/api/user/1")
+        //     .end((err,res) => {
+        //         res.should.be.an("object")
+        //         let {status, result} = res.body;
+        //         status.should.equals(401)
+        //         result.should.be.a("string").that.equals("Cant delete user, as you are not logged in");
+        //         done();
+        //     });
+        // });
 
         //cant do this one yet as token/login function isnt implemented yet, so its told to be skipped
-        xit("TC-206-3 User isnt the owner of the user they are trying to delete", (done) => {
-            chai.request(server).delete("/api/user/1")
-            .end((err,res) => {
-                res.should.be.an("object")
-                let {status, result} = res.body;
-                status.should.equals(401)
-                result.should.be.a("string").that.equals("Cant delete user, as you are not the owner of this user");
-                done();
-            });
-        });
+        // xit("TC-206-3 User isnt the owner of the user they are trying to delete", (done) => {
+        //     chai.request(server).delete("/api/user/1")
+        //     .end((err,res) => {
+        //         res.should.be.an("object")
+        //         let {status, result} = res.body;
+        //         status.should.equals(401)
+        //         result.should.be.a("string").that.equals("Cant delete user, as you are not the owner of this user");
+        //         done();
+        //     });
+        // });
 
         it("TC-206-4 User succesfully deleted", (done) => {
             chai.request(server).delete("/api/user/1")
