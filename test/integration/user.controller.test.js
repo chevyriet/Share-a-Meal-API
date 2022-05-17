@@ -122,6 +122,7 @@ describe("Manage Users /api/user",() => {
                 lastName: "Rietveld",
                 street: "Van Wenastraat 31",
                 city: "Giessenburg",
+                phoneNumber: "0651160300",
                 password: "wvqOertE5!",
                 emailAdress: "chevy@gmail.com"
             })
@@ -129,7 +130,18 @@ describe("Manage Users /api/user",() => {
                 res.should.be.an("object")
                 let {status, result} = res.body;
                 status.should.equals(201)
-                result.should.be.an('array').that.lengthOf(1);
+                assert.deepEqual(result, {
+                    id: 2,                          
+                    firstName: 'Chevy',             
+                    lastName: 'Rietveld',           
+                    isActive: 1,                    
+                    emailAdress: 'chevy@gmail.com', 
+                    password: 'wvqOertE5!',
+                    phoneNumber: "0651160300",            
+                    roles: 'editor,guest',          
+                    street: 'Van Wenastraat 31',    
+                    city: 'Giessenburg'
+                })
                 done();
             });
         });
