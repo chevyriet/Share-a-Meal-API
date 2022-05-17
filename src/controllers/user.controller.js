@@ -12,7 +12,7 @@ let controller={
         let { firstName, lastName, street, city, password, emailAdress } = user;
         try{
             //password contains 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit
-            assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/, "Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
+            // assert.match(password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/, "Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
             //emailAdress must be valid (found this regex online, not aware of all details)
             assert.match(emailAdress, /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "The provided Emailadress format is invalid");
 
