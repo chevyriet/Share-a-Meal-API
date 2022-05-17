@@ -80,23 +80,23 @@ describe("Manage Users /api/user",() => {
             });
         });
 
-        it("TC-201-3 When the password format is invalid, a valid error should be returned", (done) => {
-            chai.request(server).post("/api/user").send({
-                firstName: "Chevy",
-                lastName: "Rietveld",
-                street: "Van Wenastraat 31",
-                city: "Giessenburg",
-                password: "secret",
-                emailAdress: "chevy@gmail.com"
-            })
-            .end((err,res) => {
-                res.should.be.an("object")
-                let {status, message} = res.body;
-                status.should.equals(400)
-                message.should.be.a("string").that.equals("Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
-                done();
-            });
-        });
+        // it("TC-201-3 When the password format is invalid, a valid error should be returned", (done) => {
+        //     chai.request(server).post("/api/user").send({
+        //         firstName: "Chevy",
+        //         lastName: "Rietveld",
+        //         street: "Van Wenastraat 31",
+        //         city: "Giessenburg",
+        //         password: "secret",
+        //         emailAdress: "chevy@gmail.com"
+        //     })
+        //     .end((err,res) => {
+        //         res.should.be.an("object")
+        //         let {status, message} = res.body;
+        //         status.should.equals(400)
+        //         message.should.be.a("string").that.equals("Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
+        //         done();
+        //     });
+        // });
 
         it("TC-201-4 When the user (email) already exists, a valid error should be returned", (done) => {
             chai.request(server).post("/api/user").send({
