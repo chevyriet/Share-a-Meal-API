@@ -127,9 +127,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(201)
-                message.should.be.a("string").that.equals("User has been succesfully registered");
+                result.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });
@@ -385,7 +385,7 @@ describe("Manage Users /api/user",() => {
                 res.should.be.an("object")
                 let {status, message} = res.body;
                 status.should.equals(400)
-                message.should.be.a("string").that.equals("User with ID 999 not found, and could not be deleted");
+                message.should.be.a("string").that.equals("User does not exist");
                 done();
             });
         });

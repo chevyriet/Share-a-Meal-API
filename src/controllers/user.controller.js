@@ -61,12 +61,14 @@ let controller={
                         message: `Could not add user, the email has already been taken`
                     })
                 } else {
-                    connection.release();
-                    res.status(201).json({
+                    connection.query('SELECT * FROM user WHERE emailAdress = ?', [user.emailAdress], function (error, results, fields) {
+                        connection.release();
+                        res.status(201).json({
                         status: 201,
-                        message: `User has been succesfully registered`,
+                        result: results,
+                        })
                     })
-                }
+                } 
             })
         })
     },
@@ -150,7 +152,7 @@ let controller={
                 } else {
                     res.status(400).json({
                         status: 400,
-                        message: `User with ID ${userId} not found, and could not be deleted`,
+                        message: `User does not exist`,
                     });
                 }
             });
