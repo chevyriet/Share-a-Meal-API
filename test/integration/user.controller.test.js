@@ -55,9 +55,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("First name must be a string");
+                message.should.be.a("string").that.equals("First name must be a string");
                 done();
             });
         });
@@ -73,9 +73,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("The provided Emailadress format is invalid");
+                message.should.be.a("string").that.equals("The provided Emailadress format is invalid");
                 done();
             });
         });
@@ -91,9 +91,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
+                message.should.be.a("string").that.equals("Password must contain 8-15 characters which contains at least one lower- and uppercase letter, one special character and one digit");
                 done();
             });
         });
@@ -109,9 +109,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(409)
-                result.should.be.a("string").that.equals("Could not add user, the email has already been taken");
+                message.should.be.a("string").that.equals("Could not add user, the email has already been taken");
                 done();
             });
         });
@@ -127,9 +127,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(201)
-                result.should.be.a("string").that.equals("User has been succesfully registered");
+                message.should.be.a("string").that.equals("User has been succesfully registered");
                 done();
             });
         });
@@ -153,9 +153,9 @@ describe("Manage Users /api/user",() => {
             chai.request(server).get("/api/user/356783")
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(404)
-                result.should.be.a("string").that.equals("User with ID 356783 could not be found");
+                message.should.be.a("string").that.equals("User with ID 356783 could not be found");
                 done();
             });
         });
@@ -197,9 +197,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("First name must be a string");
+                message.should.be.a("string").that.equals("First name must be a string");
                 done();
             });
         });
@@ -216,9 +216,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("Phonenumber must be 10 digits long, example: 0612345678");
+                message.should.be.a("string").that.equals("Phonenumber must be 10 digits long, example: 0612345678");
                 done();
             });
         });
@@ -235,9 +235,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("Update failed, user with ID 999 does not exist");
+                message.should.be.a("string").that.equals("Update failed, user with ID 999 does not exist");
                 done();
             });
         });
@@ -295,9 +295,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [])
+                message.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -307,34 +307,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [
-                    {
-                        id: 1,
-                        firstName: 'Mariëtte',
-                        lastName: 'van den Dullemen',
-                        isActive: 1,
-                        emailAdress: 'm.vandullemen@server.nl',
-                        password: 'pfefejW41!',
-                        phoneNumber: '0687629321',
-                        roles: 'editor,guest',
-                        street: 'Groenstraat 10',
-                        city: 'Rotterdam',
-                    },
-                    {
-                        id: 2,                          
-                        firstName: 'Chevy',             
-                        lastName: 'Rietveld',           
-                        isActive: 0,                    
-                        emailAdress: 'chevy@gmail.com', 
-                        password: 'wvqOertE5!',         
-                        phoneNumber: '0651160300',      
-                        roles: 'editor,guest',          
-                        street: 'Van Wenastraat 31',    
-                        city: 'Giessenburg'  
-                    }
-                ])
+                message.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
@@ -344,9 +319,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [])
+                message.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -356,22 +331,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [
-                    {
-                        id: 2,                          
-                        firstName: 'Chevy',             
-                        lastName: 'Rietveld',           
-                        isActive: 0,                    
-                        emailAdress: 'chevy@gmail.com', 
-                        password: 'wvqOertE5!',         
-                        phoneNumber: '0651160300',      
-                        roles: 'editor,guest',          
-                        street: 'Van Wenastraat 31',    
-                        city: 'Giessenburg'
-                    }
-                ]);
+                message.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });
@@ -381,22 +343,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [
-                    {
-                        id: 1,
-                        firstName: 'Mariëtte',
-                        lastName: 'van den Dullemen',
-                        isActive: 1,
-                        emailAdress: 'm.vandullemen@server.nl',
-                        password: 'pfefejW41!',
-                        phoneNumber: '0687629321',
-                        roles: 'editor,guest',
-                        street: 'Groenstraat 10',
-                        city: 'Rotterdam',
-                    }
-                ]);
+                message.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });
@@ -406,22 +355,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(result, [
-                    {
-                        id: 2,                          
-                        firstName: 'Chevy',             
-                        lastName: 'Rietveld',           
-                        isActive: 0,                    
-                        emailAdress: 'chevy@gmail.com', 
-                        password: 'wvqOertE5!',         
-                        phoneNumber: '0651160300',      
-                        roles: 'editor,guest',          
-                        street: 'Van Wenastraat 31',    
-                        city: 'Giessenburg'
-                    }
-                ]);
+                message.should.be.an('array').that.lengthOf(1);
                 done();
             });
         });
@@ -447,9 +383,9 @@ describe("Manage Users /api/user",() => {
             chai.request(server).delete("/api/user/999")
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(400)
-                result.should.be.a("string").that.equals("User with ID 999 not found, and could not be deleted");
+                message.should.be.a("string").that.equals("User with ID 999 not found, and could not be deleted");
                 done();
             });
         });
@@ -482,9 +418,9 @@ describe("Manage Users /api/user",() => {
             chai.request(server).delete("/api/user/1")
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, result} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(200)
-                result.should.be.a("string").that.equals("User with ID 1 succesfully deleted");
+                message.should.be.a("string").that.equals("User with ID 1 succesfully deleted");
                 done();
             });
         });

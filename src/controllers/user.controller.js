@@ -26,7 +26,7 @@ let controller={
         } catch(err){
             const error={
                 status: 400,
-                result: err.message
+                message: err.message
             };
             next(error);
         }
@@ -43,7 +43,7 @@ let controller={
         } catch(err){
             const error={
                 status: 400,
-                result: err.message
+                message: err.message
             };
             next(error);
         }
@@ -58,13 +58,13 @@ let controller={
                     connection.release();
                     res.status(409).json({
                         status: 409,
-                        result: `Could not add user, the email has already been taken`
+                        message: `Could not add user, the email has already been taken`
                     })
                 } else {
                     connection.release();
                     res.status(201).json({
                         status: 201,
-                        result: `User has been succesfully registered`,
+                        message: `User has been succesfully registered`,
                     })
                 }
             })
@@ -103,7 +103,7 @@ let controller={
                 logger.debug('Amount of results: ',results.length);
                 res.status(200).json({
                     status: 200,
-                    result: results,
+                    message: results,
                 });
             });
         });
@@ -124,7 +124,7 @@ let controller={
                 } else {
                     res.status(404).json({
                         status: 404,
-                        result: `User with ID ${userId} could not be found`
+                        message: `User with ID ${userId} could not be found`
                     })
                 }
             });
@@ -145,12 +145,12 @@ let controller={
                 if(results.affectedRows > 0){
                     res.status(200).json({
                     status: 200,
-                    result: `User with ID ${userId} succesfully deleted`,
+                    message: `User with ID ${userId} succesfully deleted`,
                     });
                 } else {
                     res.status(400).json({
                         status: 400,
-                        result: `User with ID ${userId} not found, and could not be deleted`,
+                        message: `User with ID ${userId} not found, and could not be deleted`,
                     });
                 }
             });
@@ -167,7 +167,7 @@ let controller={
                 if(error){
                     res.status(401).json({
                         status: 401,
-                        result: `Update failed, provided email already taken`
+                        message: `Update failed, provided email already taken`
                     })
                     return;
                 }
@@ -181,7 +181,7 @@ let controller={
                 } else {
                     res.status(400).json({
                         status: 400,
-                        result: `Update failed, user with ID ${userId} does not exist`
+                        message: `Update failed, user with ID ${userId} does not exist`
                     })
                 }
             });
@@ -191,7 +191,7 @@ let controller={
     getUserProfile:(req,res,next)=>{
         const error={
             status: 401,
-            result: "Cant fetch user profile as this functionality has not been realized yet",
+            message: "Cant fetch user profile as this functionality has not been realized yet",
         };
         next(error);
     },
