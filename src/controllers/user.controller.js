@@ -1,7 +1,6 @@
 const { equal } = require("assert");
 const assert = require("assert");
 const { isBuffer } = require("util");
-let database = [];
 const dbconnection = require("../../database/dbconnection")
 const logger = require('../config/config').logger
 

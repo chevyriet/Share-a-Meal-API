@@ -11,6 +11,7 @@ app.use(bodyParser.json());
 
 const userRouter = require("./src/routes/user.routes");
 const authRouter = require("./src/routes/auth.routes");
+const mealRouter = require("./src/routes/meal.routes");
 
 let database = [];
 let id = 0;
@@ -24,6 +25,7 @@ app.all("*", (req, res, next) => {
 
 app.use(userRouter);
 app.use(authRouter);
+app.use(mealRouter);
 
 //error page not found
 app.all("*", (req, res) => {
