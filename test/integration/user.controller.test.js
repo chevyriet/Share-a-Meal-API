@@ -5,6 +5,7 @@ const server = require("../../index");
 require('dotenv').config();
 const dbconnection = require("../../database/dbconnection");
 const { assert } = require("chai");
+const logger = require('../../src/config/config').logger
 
 chai.should();
 chai.use(chaiHttp);
@@ -24,7 +25,7 @@ describe("Manage Users /api/user",() => {
                 });
             });
         });
-        console.log('before done')
+        logger.debug('before done')
     })
 
     describe("UC-201 add users /api/user", ()=> {

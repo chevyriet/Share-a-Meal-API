@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const logger = require('./src/config/config').logger
 
 require('dotenv').config()
 
@@ -9,6 +10,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 const userRouter = require("./src/routes/user.routes");
+const authRouter = require("./src/routes/auth.routes");
 
 let database = [];
 let id = 0;
@@ -16,11 +18,12 @@ let id = 0;
 //logging any called methods
 app.all("*", (req, res, next) => {
   const method = req.method;
-  console.log(`Method ${method} called`);
+  logger.debug(`Method ${method} called`);
   next();
 });
 
 app.use(userRouter);
+app.use(authRouter);
 
 //error page not found
 app.all("*", (req, res) => {
@@ -36,7 +39,7 @@ app.use((err,req,res,next) => {
 });
 
 app.listen(port, () => {
-  console.log(`Share A Meal API app listening on port ${port}`);
+  logger.debug(`Share A Meal API app listening on port ${port}`);
 });
 
 module.exports = app;

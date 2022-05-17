@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/user.controller")
+const authController = require('../controllers/auth.controller')
+const logger = require('../config/config').logger
 
 let database = [];
 let id = 0;

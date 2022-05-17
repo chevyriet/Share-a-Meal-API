@@ -3,6 +3,7 @@ const assert = require("assert");
 const { isBuffer } = require("util");
 let database = [];
 const dbconnection = require("../../database/dbconnection")
+const logger = require('../config/config').logger
 
 let controller={
     //validates a user before being created (Also need a separate one for validating postal-code and phonenumber on update)
@@ -95,11 +96,11 @@ let controller={
         };
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            console.log(query);
+            logger.debug(query);
             connection.query(query, function (error, results, fields) {
                 if (error) throw error; 
                 connection.release();
-                console.log('Amount of results: ',results.length);
+                logger.debug('Amount of results: ',results.length);
                 res.status(200).json({
                     status: 200,
                     result: results,
@@ -110,7 +111,7 @@ let controller={
     //UC-204: Get a single user by ID (doesnt return users meals aswell yet)
     getUserById:(req,res)=>{
         const userId = req.params.userId;
-        console.log(`User with ID ${userId} requested`);
+        logger.debug(`User with ID ${userId} requested`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
             connection.query('SELECT * FROM user WHERE id = ?;', [userId], function (error, results, fields) {
@@ -133,7 +134,7 @@ let controller={
     deleteUser:(req,res) => {
         const userId = req.params.userId;
         let user;
-        console.log(`User with ID ${userId} requested to be deleted`);
+        logger.debug(`User with ID ${userId} requested to be deleted`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err;
 
@@ -159,7 +160,7 @@ let controller={
     updateUser:(req,res)=>{
         const userId = req.params.userId;
         const updateUser = req.body;
-        console.log(`User with ID ${userId} requested to be updated`);
+        logger.debug(`User with ID ${userId} requested to be updated`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
             connection.query('UPDATE user SET firstName=?, lastName=?, isActive=?, emailAdress=?, password=?, phoneNumber=?, street=?, city=? WHERE id = ?;', [updateUser.firstName, updateUser.lastName, updateUser.isActive, updateUser.emailAdress, updateUser.password, updateUser.phoneNumber, updateUser.street, updateUser.city, userId], function (error, results, fields) {
