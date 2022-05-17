@@ -79,10 +79,6 @@ module.exports = {
             }
         })
     },
-
-    //
-    //
-    //
     validateLogin(req, res, next) {
         // Verify that we receive the expected input
         try {
@@ -102,10 +98,31 @@ module.exports = {
             })
         }
     },
-
-    //
-    //
-    //
+    //Method to check if a user is the owner of the meal they are trying to update or delete
+    validateOwnership(req,res,next) {
+        const userId = req.userId;
+        const mealId = req.params.mealId;
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; 
+            connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
+                if (error) throw error; 
+                connection.release();
+                if(results[0]){
+                    const cookId = results[0].cookId;
+                    if(userId !== cookId){
+                        res.status(403).json({
+                            status: 403,
+                            message: "User is not the owner of the meal that is being requested to be deleted or updated",
+                    });
+                } else {
+                    next()
+                }
+                } else {
+                    next();
+                }
+            });
+        });
+    },
     validateToken(req, res, next) {
         logger.info('validateToken called')
         // logger.trace(req.headers)
