@@ -8,7 +8,7 @@ const logger = require('../config/config').logger
 const jwtSecretKey = require('../config/config').jwtSecretKey
 
 module.exports = {
-    login(req, res, next) {
+    login(req, res) {
         dbconnection.getConnection((err, connection) => {
             if (err) {
                 logger.error('Error getting connection from dbconnection')
