@@ -147,15 +147,90 @@ let controller = {
                     message: `Meal with ID ${mealId} succesfully deleted`,
                     });
                 } else {
-                    res.status(400).json({
+                    res.status(404).json({
                         status: 404,
                         message: `Delete failed, meal with ID ${mealId} does not exist`,
                     });
                 }
             });
         });
-    }
+    },
+    //add or deletes a user participation in a meal
+    manageParticipation: (req,res) => {
+        const mealId = req.params.mealId;
+        const userId = req.userId;
+        let meal;
+        let currentAmountOfParticipants = 0;
+        let currentlyParticipating;
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err;
+            //checks if meal exists
+            connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
+                if (error) throw error;
+                if(results.length !== 0){
+                    meal = results[0];
+                    //checks amount of participants in the meal
+                    connection.query('SELECT * FROM meal_participants_user WHERE mealId = ?;', [mealId], function (error, results, fields) {
+                        currentAmountOfParticipants = results.length;
+                        //checks if user is already participating in the meal
+                        connection.query('SELECT * FROM meal_participants_user WHERE mealId = ? AND userId = ?;', [mealId, userId], function (error, results, fields) {
+                            if (error) throw error;
+                            //if there are no results for a participation, it gets added (if the max isnt already reached)
+                            if(results.length == 0){
+                                if(currentAmountOfParticipants < meal.maxAmountOfParticipants){
+                                    connection.query('INSERT INTO meal_participants_user (mealId, userId) VALUES(?, ?);', [mealId, userId], function (error, results, fields) {
+                                        connection.release();
+                                        if (error) throw error;
+                                        currentAmountOfParticipants++;
+                                        currentlyParticipating = true;
+                                        logger.debug("User has sucessfully been participated")
 
+                                        res.status(200).json({
+                                            status: 200,
+                                            result: [{
+                                                "currentlyParticipating": currentlyParticipating,
+                                                "currentAmountOfParticipants": currentAmountOfParticipants 
+                                            }],
+                                        });
+                                    });
+                                } else {
+                                    connection.release();
+                                    res.status(409).json({
+                                        status: 409,
+                                        message: `Cant add participation as max amount of participants has already been reached`,
+                                    });
+                                }
+                            //if the user was already participated, it gets removed
+                            } else {
+                                console.log(results);
+                                connection.query('DELETE FROM meal_participants_user WHERE mealId = ? AND userId = ?;', [mealId, userId], function (error, results, fields) {
+                                    connection.release();
+                                    if (error) throw error;
+                                    currentAmountOfParticipants--;
+                                    currentlyParticipating = false;
+                                    logger.debug("User participation has sucessfully been removed")
+
+                                    res.status(200).json({
+                                        status: 200,
+                                        result: [{
+                                            "currentlyParticipating": currentlyParticipating,
+                                            "currentAmountOfParticipants": currentAmountOfParticipants 
+                                        }],
+                                    });
+                                }) 
+                            }
+                        });
+                    })
+                } else {
+                    connection.release();
+                    res.status(404).json({
+                        status: 404,
+                        message: `Cant manage participation as meal with ID ${mealId} does not exist`,
+                    });
+                }
+            });
+        });
+    }
 }
 
 module.exports = controller;

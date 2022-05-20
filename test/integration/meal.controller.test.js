@@ -17,7 +17,7 @@ const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ3LCJpYXQiOjE2
 chai.should();
 chai.use(chaiHttp);
 
-describe("Manage Meals /api/meal", () => {
+describe("Manage Meals and Participations /api/meal", () => {
 
     //completely empties database before starting with tests, and adds one user
     before((done) => {
@@ -425,6 +425,102 @@ describe("Manage Meals /api/meal", () => {
                 let {status, message} = res.body;
                 status.should.equals(200)
                 message.should.be.a("string").that.equals("Meal with ID 2 succesfully deleted");
+                done();
+            });
+        })
+    })
+
+    describe("UC-401 Participating a user in a meal /api/meal/participate", () => {
+
+        it("TC-401-1 User not logged in when trying to participate in a meal", (done) => {
+            //no token sent to simulate user isnt logged in
+            chai.request(server).get("/api/meal/1/participate").send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(401)
+                message.should.be.a("string").that.equals("User is not logged in");
+                done();
+            });
+        })
+
+        it("TC-401-2 Meal that user is trying to participate in doesnt exist", (done) => {
+            chai.request(server).get("/api/meal/500/participate").auth(token, { type: 'bearer' }).send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(404)
+                message.should.be.a("string").that.equals("Cant manage participation as meal with ID 500 does not exist");
+                done();
+            });
+        })
+
+        it("TC-401-3 User has succesfully participated in a meal", (done) => {
+            chai.request(server).get("/api/meal/1/participate").auth(token, { type: 'bearer' }).send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        currentlyParticipating: true,
+                        currentAmountOfParticipants: 1
+                    }
+                ])
+                done();
+            });
+        })
+    })
+
+    describe("UC-402 Removing a user participation from a meal /api/meal/participate", () => {
+
+        it("TC-402-1 User not logged in when trying to remove participation in a meal", (done) => {
+            //no token sent to simulate user isnt logged in
+            chai.request(server).get("/api/meal/1/participate").send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(401)
+                message.should.be.a("string").that.equals("User is not logged in");
+                done();
+            });
+        })
+
+        it("TC-402-2 Meal that user is trying to remove participation from doesnt exist", (done) => {
+            chai.request(server).get("/api/meal/500/participate").auth(token, { type: 'bearer' }).send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(404)
+                message.should.be.a("string").that.equals("Cant manage participation as meal with ID 500 does not exist");
+                done();
+            });
+        })
+
+        it("TC-402-3 User has succesfully removed participation from a meal", (done) => {
+            chai.request(server).get("/api/meal/1/participate").auth(token, { type: 'bearer' }).send({
+            })
+            .end((err,res) => {
+                console.log(err);
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, [
+                    {
+                        currentlyParticipating: false,
+                        currentAmountOfParticipants: 0
+                    }
+                ])
                 done();
             });
         })
