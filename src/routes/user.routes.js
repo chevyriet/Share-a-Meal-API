@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
     });
   });
 
-//getting a users profile, if it has a valid JWT token (endpoint not realized yet)
-router.all("/api/user/profile",userController.getUserProfile);
+//getting a users profile, if it has a valid JWT token 
+router.all("/api/user/profile", authController.validateToken, userController.getUserProfile);
 
 //handling a post request for a new user
 router.post("/api/user", userController.validateUser, userController.addUser);

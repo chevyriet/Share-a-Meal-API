@@ -189,12 +189,21 @@ let controller={
             connection.release();
         });
     },
+    //UC-203 Request personal user profile (If user provides a valid JWT token)
     getUserProfile:(req,res,next)=>{
-        const error={
-            status: 401,
-            message: "Cant fetch user profile as this functionality has not been realized yet",
-        };
-        next(error);
+        const userId = req.userId;
+        logger.debug(`Personal profile of user with ID ${userId} requested`);
+        dbconnection.getConnection(function(err, connection) {
+            if (err) throw err; 
+            connection.query('SELECT * FROM user WHERE id = ?;', [userId], function (error, results, fields) {
+                connection.release();
+
+                res.status(200).json({
+                    status: 200,
+                    result: results[0],
+                });
+            });
+        });
     },
 }
 module.exports = controller;
