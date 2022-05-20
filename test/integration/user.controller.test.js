@@ -6,9 +6,15 @@ require('dotenv').config();
 const dbconnection = require("../../database/dbconnection");
 const { assert } = require("chai");
 const logger = require('../../src/config/config').logger
+const jwt = require('jsonwebtoken');
+const jwtSecretKey = require('../../src/config/config').jwtSecretKey
 
 chai.should();
 chai.use(chaiHttp);
+
+//token to use for tests that need authentication token to pass, will expire in a week or 2
+//valid token
+const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQ3LCJpYXQiOjE2NTI5NjM1NDUsImV4cCI6MTY1NDAwMDM0NX0.6m-xqHSnb1ekPubW6-t0Fbpxaxuo3LxypI4cPz-dEOE"
 
 describe("Manage Users /api/user",() => {
     
@@ -146,6 +152,42 @@ describe("Manage Users /api/user",() => {
             });
         });
     });
+
+    describe("UC-203 Getting personal user profile /api/user/profile", () => {
+
+        it("TC-203-1 Invalid token when retrieving personal user profile", (done) => {
+            chai.request(server).get("/api/user/profile").auth("invalidTokenExample", { type: 'bearer' })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, error} = res.body;
+                status.should.equals(401)
+                error.should.be.a("string").that.equals("Not authorized");
+                done();
+            });
+        });
+
+        it("TC-203-2 Valid token and user exists when retrieving personal user profile", (done) => {
+            chai.request(server).get("/api/user/profile").set('authorization', 'Bearer ' + jwt.sign({ userId: 2 }, jwtSecretKey))
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, result} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(result, {
+                    id: 2,                          
+                    firstName: 'Chevy',             
+                    lastName: 'Rietveld',           
+                    isActive: 1,                    
+                    emailAdress: 'chevy@gmail.com', 
+                    password: 'wvqOertE5!',
+                    phoneNumber: "0651160300",            
+                    roles: 'editor,guest',          
+                    street: 'Van Wenastraat 31',    
+                    city: 'Giessenburg'
+                })
+                done();
+            });
+        });
+    })
 
     describe("UC-204 Details of a user /api/user", ()=> {
         

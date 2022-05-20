@@ -134,6 +134,7 @@ module.exports = {
             res.status(401).json({
                 status: 401,
                 message: 'User is not logged in',
+                // datetime: new Date().toISOString(),
             })
         } else {
             // Strip the word 'Bearer ' from the headervalue
@@ -143,8 +144,9 @@ module.exports = {
                 if (err) {
                     logger.warn('Not authorized')
                     res.status(401).json({
+                        status: 401,
                         error: 'Not authorized',
-                        datetime: new Date().toISOString(),
+                        // datetime: new Date().toISOString(),
                     })
                 }
                 if (payload) {
