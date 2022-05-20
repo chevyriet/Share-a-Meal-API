@@ -28,7 +28,7 @@ describe("Manage Meals /api/meal", () => {
                     connection.query('DELETE FROM user;', function (error, result, field) {
                         connection.query('INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES' +'(47, "Chevy", "Rietveld", "chevy@gmail.com", "berOertE5!", "Van Wenastraat 31", "Giessenburg");', function (error, result, field) {
                             connection.query('INSERT INTO `user` (`id`, `firstName`, `lastName`, `emailAdress`, `password`, `street`, `city` ) VALUES' +'(20, "Jan", "de Ruiter", "jan@gmail.com", "vsehUeftE5!", "Dorpstraat 31", "Giessenburg");', function (error, result, field) {
-                                connection.query('INSERT INTO `meal` (`id`, `name`, `description`, `imageUrl`, `dateTime`, `maxAmountOfParticipants`, `price`, `cookId`) VALUES' + "(1, 'Pasta Bolognese met tomaat, spekjes en kaas', 'lekker', 'https://google.com', '2022-04-09T09:37:10.000Z', 4, 8.00, 20);", function (error, result, field) {
+                                connection.query('INSERT INTO `meal` (`id`, `name`, `description`, `imageUrl`, `dateTime`, `maxAmountOfParticipants`, `price`, `cookId`) VALUES' + "(1, 'Pasta Bolognese met tomaat, spekjes en kaas', 'lekker', 'https://google.com', '2022-04-09 09:37:10', 4, 8.00, 20);", function (error, result, field) {
                                     if(error) throw error;
                                     connection.release();
                                     done();
