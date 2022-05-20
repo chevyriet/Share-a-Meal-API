@@ -6,14 +6,14 @@ const logger = require('../config/config').logger
 
 let controller = {
     //validates a meal before being created
-    validateMeal: (req, res) => {
+    validateMeal: (req, res, next) => {
         let meal = req.body;
-        let { dateTime, price, imageUrl, name, description } = user;
+        let { dateTime, price, imageUrl, name, description } = meal;
         try {
             assert(typeof imageUrl === "string", "ImageUrl must be a string");
             assert(typeof name === "string", "Name must be a string");
             assert(typeof description === "string", "Description must be a string");
-            assert(typeof price === "string", "Price must be a string");
+            assert(typeof price === "number", "Price must be a number");
             assert(typeof dateTime === "string", "DateTime must be a string");
             next();
         } catch (err) {
@@ -21,12 +21,13 @@ let controller = {
                 status: 400,
                 message: err.message,
             };
+            next(error);
         }
     },
     //validates a meal before being updated, needed seperate method as update also needs a check for maxAmountOfParticipants, and create doesnt
-    validateUpdateMeal: (req, res) => {
+    validateUpdateMeal: (req, res, next) => {
         let meal = req.body;
-        let { maxAmountOfParticipants } = user;
+        let { maxAmountOfParticipants } = meal;
         try {
             assert(typeof maxAmountOfParticipants === "number", "Maximum amount of participants must be present");
             next();
@@ -35,16 +36,19 @@ let controller = {
                 status: 400,
                 message: err.message,
             };
+            next(error);
         }
     },
     //UC-301 Register a meal
     addMeal: (req,res) => {
         let meal = req.body;
         const cookId = req.userId
+        let allergenes = req.body.allergenes.join();
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err;
-            connection.query('INSERT INTO meal (datetime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', [meal.datetime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome], function (error, results, fields) {
+            connection.query(`INSERT INTO meal (dateTime, maxAmountOfParticipants, price, imageUrl, cookId, name, description, isActive, isVega, isVegan, isToTakeHome, allergenes) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`, [meal.dateTime, meal.maxAmountOfParticipants, meal.price, meal.imageUrl, cookId, meal.name, meal.description, meal.isActive, meal.isVega, meal.isVegan, meal.isToTakeHome, allergenes], function (error, results, fields) {
                 if (error) {
+                    console.log(error);
                     connection.release();
                     res.status(409).json({
                         status: 409,
@@ -72,7 +76,7 @@ let controller = {
                 logger.debug('Amount of results: ',results.length);
                 res.status(200).json({
                     status: 200,
-                    message: results,
+                    result: results,
                 });
             });
         });
@@ -103,10 +107,12 @@ let controller = {
     updateMeal: (req, res) => {
         const mealId = req.params.mealId;
         const updateMeal = req.body;
+        let updateAllergenes = req.body.allergenes.join()
         logger.debug(`Meal with ID ${mealId} requested to be updated`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.datetime, updateMeal.imageUrl, updateMeal.allergenes, updateMeal.maxAmountOfParticipants, updateMeal.price, mealId], function (error, results, fields) {
+            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.dateTime, updateMeal.imageUrl, updateAllergenes, updateMeal.maxAmountOfParticipants, updateMeal.price, mealId], function (error, results, fields) {
+                if(error) throw error
                 if(results.affectedRows>0){
                     connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
                         res.status(200).json({
@@ -143,7 +149,7 @@ let controller = {
                 } else {
                     res.status(400).json({
                         status: 404,
-                        message: `Meal does not exist`,
+                        message: `Delete failed, meal with ID ${mealId} does not exist`,
                     });
                 }
             });
@@ -151,4 +157,5 @@ let controller = {
     }
 
 }
+
 module.exports = controller;

@@ -8,7 +8,7 @@ const logger = require('../config/config').logger
 const jwtSecretKey = require('../config/config').jwtSecretKey
 
 module.exports = {
-    login(req, res) {
+    login(req, res, next) {
         dbconnection.getConnection((err, connection) => {
             if (err) {
                 logger.error('Error getting connection from dbconnection')
@@ -102,6 +102,7 @@ module.exports = {
     validateOwnership(req,res,next) {
         const userId = req.userId;
         const mealId = req.params.mealId;
+
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
             connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
@@ -113,12 +114,12 @@ module.exports = {
                         res.status(403).json({
                             status: 403,
                             message: "User is not the owner of the meal that is being requested to be deleted or updated",
-                    });
+                        });
+                    } else {
+                        next()
+                    }
                 } else {
                     next()
-                }
-                } else {
-                    next();
                 }
             });
         });
@@ -131,8 +132,8 @@ module.exports = {
         if (!authHeader) {
             logger.warn('Authorization header missing!')
             res.status(401).json({
-                error: 'Authorization header missing!',
-                datetime: new Date().toISOString(),
+                status: 401,
+                message: 'User is not logged in',
             })
         } else {
             // Strip the word 'Bearer ' from the headervalue
