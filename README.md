@@ -1,92 +1,88 @@
-# programmeren-4-sam-server
+
+# Share-A-Meal API 
+
+[![Deploy to Heroku](https://github.com/chevyriet/programmeren-4-shareameal/actions/workflows/main.yml/badge.svg)](https://github.com/chevyriet/programmeren-4-shareameal/actions/workflows)
+
+![GitHub repo size](https://img.shields.io/github/repo-size/chevyriet/programmeren-4-shareameal?label=Total%20Size)
+
+An API written primarily in [Node.js](https://nodejs.org/en/), deployed on [Heroku](https://dashboard.heroku.com/)
 
 
+## Table of Contents
 
-## Getting started
+ - [About the API](#about-the-api)
+    - [Author Information](#author-information)
+    - [Used Frameworks/Libraries](#used-frameworks/libraries)
+ - [Installation and Deployment](#installation-and-deployment)
+ - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## About the API
 
-## Add your files
+The Share-A-Meal API is an API that could support an application by offering functionality like creating, sharing, editing and deleting meals, with users also being able to participate in these meals (and remove themselves) and make use of these [**'CRUD'**](https://nl.wikipedia.org/wiki/CRUD) functionalities.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Not only do the meals use these CRUD functionalities, the users do aswell (The API makes sure they only perform these CRUD functionalities on themselves, which we'll get into later).
 
+Users are also able to login to their account after registering themselves, which gives them access to a big part of the functionality of the API. This is all made possible by using [jwt](https://jwt.io/introduction), who provide secure **jsonwebtokens**, handling a secure authentication.
+
+#### [The Share-A-Meal API](https://chevy-shareameal-prog4.herokuapp.com/)
+
+### Author Information
+This API was made by Chevy Rietveld, 🔗my links: [![Github](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/chevyriet)
+
+### Used Frameworks/Libraries
+A list of frameworks/libraries that are used in this API, with a small description.
+
+- [Node.js](https://nodejs.org/en/) *"An asynchronous event-driven JavaScript runtime"*
+- [Express](https://expressjs.com/) *"Fast, unopinionated, minimalist web framework for Node.js"*
+- [Mocha](https://mochajs.org/) *"A feature-rich JavaScript test framework running on Node.js and in the browser"*
+- [Chai](https://www.chaijs.com/) *"A JavaScript BDD / TDD assertion library for node and the browser"*
+- [Tracer](https://www.npmjs.com/package/tracer) *"A powerful and customizable logging library for node.js"*
+- [Dotenv](https://www.npmjs.com/package/dotenv) *"Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env"*
+- [Assert](https://www.npmjs.com/package/assert) *"The assert module from Node.js, for the browser."*
+- [Nodemon](https://www.npmjs.com/package/nodemon) *"A tool that helps develop Node.js based applications by automatically restarting the node application when file changes in the directory are detected."*
+- [Mysql2](https://www.npmjs.com/package/mysql2) *"A client for Node.js with focus on performance."*
+- [jwt](https://jwt.io/introduction) *"JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object."*
+
+## Installation and Deployment
+To install the API: 
+
+1. Download the code by either forking or cloning the [repository](https://github.com/chevyriet/programmeren-4-shareameal), or downloading the zip-file.
+
+2. Install the required NPM packages:
+```bash
+  npm install
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/rschellius/programmeren-4-sam-server.git
-git branch -M main
-git push -uf origin main
+
+#### Running Locally
+To run the API locally on your **LocalHost** by running the following command:
+```bash
+  npm start
 ```
 
-## Integrate with your tools
 
-- [ ] [Set up project integrations](https://gitlab.com/rschellius/programmeren-4-sam-server/-/settings/integrations)
 
-## Collaborate with your team
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
 
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!).  Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
 
 ## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+Add badges from somewhere like: [shields.io](https://shields.io/)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Contributions are always welcome!
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+See `contributing.md` for ways to get started.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Please adhere to this project's `code of conduct`.
 
-## License
-For open source projects, say how it is licensed.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
