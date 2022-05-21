@@ -59,7 +59,7 @@ module.exports = {
                                         )
                                         res.status(200).json({
                                             status: 200,
-                                            results: { ...userinfo, token },
+                                            result: { ...userinfo, token },
                                         })
                                     }
                                 )
@@ -145,7 +145,7 @@ module.exports = {
                     logger.warn('Not authorized')
                     res.status(401).json({
                         status: 401,
-                        error: 'Not authorized',
+                        message: 'Not authorized',
                         // datetime: new Date().toISOString(),
                     })
                 }

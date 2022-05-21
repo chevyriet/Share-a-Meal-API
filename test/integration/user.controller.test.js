@@ -159,9 +159,9 @@ describe("Manage Users /api/user",() => {
             chai.request(server).get("/api/user/profile").auth("invalidTokenExample", { type: 'bearer' })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, error} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(401)
-                error.should.be.a("string").that.equals("Not authorized");
+                message.should.be.a("string").that.equals("Not authorized");
                 done();
             });
         });
@@ -195,9 +195,9 @@ describe("Manage Users /api/user",() => {
             chai.request(server).get("/api/user/1").auth("invalidTokenExample", { type: 'bearer' })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, error} = res.body;
+                let {status, message} = res.body;
                 status.should.equals(401)
-                error.should.be.a("string").that.equals("Not authorized");
+                message.should.be.a("string").that.equals("Not authorized");
                 done();
             });
         });
@@ -481,14 +481,14 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, results} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200)
-                assert.deepEqual(results, {
+                assert.deepEqual(result, {
                     emailAdress: 'chevy@gmail.com',
                     firstName: 'Chevy',  
                     id: 2,                                     
                     lastName: 'Rietveld',                              
-                    token: results.token                                                
+                    token: result.token                                                
                     })
                 done();
             });
