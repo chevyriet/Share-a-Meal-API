@@ -8,14 +8,17 @@ let controller = {
     //validates a meal before being created
     validateMeal: (req, res, next) => {
         let meal = req.body;
-        let { dateTime, price, imageUrl, name, description, isToTakeHome } = meal;
+        let { dateTime, price, imageUrl, name, description, isToTakeHome, isVega, isVegan, isActive } = meal;
         try {
             assert(typeof imageUrl === "string", "ImageUrl must be a string");
             assert(typeof name === "string", "Name must be a string");
             assert(typeof description === "string", "Description must be a string");
             assert(typeof price === "number", "Price must be a number");
             assert(typeof dateTime === "string", "DateTime must be a string");
-            assert(typeof isToTakeHome != null, "isToTakeHome cannot be null")
+            assert(isToTakeHome != null, "isToTakeHome cannot be null");
+            assert(isVega != null, "isVega cannot be null");
+            assert(isVegan != null, "isVegan cannot be null");
+            assert(isActive != null, "isActive cannot be null");
             next();
         } catch (err) {
             const error = {
