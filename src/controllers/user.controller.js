@@ -89,11 +89,11 @@ let controller={
 
             //formats query based of given searchterms
             if(firstName != undefined && isActive != undefined){
-                query = `SELECT * FROM user WHERE firstName = "${firstName}" AND isActive = ${isActive}`;
+                query = `SELECT * FROM user WHERE firstName = '${firstName}' AND isActive = ${isActive}`;
             } else if (firstName == undefined && isActive != undefined){
                 query = `SELECT * FROM user WHERE isActive = ${isActive};`;
             } else {
-                query = `SELECT * FROM user WHERE firstName = "${firstName}";`;
+                query = `SELECT * FROM user WHERE firstName = '${firstName}';`;
             }
         };
         dbconnection.getConnection(function(err, connection) {
