@@ -47,7 +47,7 @@ let controller={
             next(error);
         }
     },
-    //UC-201: Register as a new user (not using token)
+    //UC-201: Register as a new user
     addUser: (req,res) => {
         let user = req.body;
         dbconnection.getConnection(function(err, connection) {
