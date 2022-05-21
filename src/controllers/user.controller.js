@@ -36,8 +36,8 @@ let controller={
         let { phoneNumber } = user;
         try{
             assert(typeof phoneNumber === "string", "Phonenumber must be a string");
-            //regex for phonenumber must be 10 digits long
-            assert.match(phoneNumber, /^\d{10}$/, "Phonenumber must be 10 digits long, example: 0612345678")
+            //regex for valid dutch phonenumber
+            assert.match(phoneNumber, /(^\+[0-9]{2}|^\+[0-9]{2}\(0\)|^\(\+[0-9]{2}\)\(0\)|^00[0-9]{2}|^0)([0-9]{9}$|[0-9\-\s]{10}$)/, "Phonenumber must be 10 digits long, example: 0612345678")
             next();
         } catch(err){
             const error={
