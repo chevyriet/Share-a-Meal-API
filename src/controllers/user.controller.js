@@ -62,6 +62,7 @@ let controller={
                 } else {
                     connection.query('SELECT * FROM user WHERE emailAdress = ?', [user.emailAdress], function (error, results, fields) {
                         connection.release();
+                        results[0].isActive = user.isActive ? true : false;
                         res.status(201).json({
                         status: 201,
                         result: results[0],

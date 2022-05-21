@@ -140,7 +140,7 @@ describe("Manage Users /api/user",() => {
                     id: 2,                          
                     firstName: 'Chevy',             
                     lastName: 'Rietveld',           
-                    isActive: 1,                    
+                    isActive: false,                    
                     emailAdress: 'chevy@gmail.com', 
                     password: 'wvqOertE5',
                     phoneNumber: "0651160300",            
