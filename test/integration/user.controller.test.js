@@ -534,7 +534,7 @@ describe("Manage Users /api/user",() => {
             });
         });
 
-        // xit("TC-206-3 User not the owner of the user they are trying to delete", (done) => {
+        // xit("TC-206-3 User isnt the owner of the user they are trying to delete", (done) => {
         //     chai.request(server).delete("/api/user/1")
         //     .end((err,res) => {
         //         res.should.be.an("object")
