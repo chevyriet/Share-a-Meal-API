@@ -484,10 +484,15 @@ describe("Manage Users /api/user",() => {
                 let {status, result} = res.body;
                 status.should.equals(200)
                 assert.deepEqual(result, {
-                    emailAdress: 'chevy@gmail.com',
-                    firstName: 'Chevy',  
-                    id: 2,                                     
-                    lastName: 'Rietveld',                              
+                    id: 2,                          
+                    firstName: 'Chevy',             
+                    lastName: 'Rietveld',           
+                    isActive: false,                    
+                    emailAdress: 'chevy@gmail.com',          
+                    phoneNumber: '0651160300',      
+                    roles: 'editor,guest',          
+                    street: 'Van Wenastraat 31',    
+                    city: 'Giessenburg',                    
                     token: result.token                                                
                     })
                 done();

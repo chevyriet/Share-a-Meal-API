@@ -20,7 +20,7 @@ module.exports = {
             if (connection) {
                 // 1. Kijk of deze useraccount bestaat.
                 connection.query(
-                    'SELECT `id`, `emailAdress`, `password`, `firstName`, `lastName` FROM `user` WHERE `emailAdress` = ?',
+                    'SELECT * FROM `user` WHERE `emailAdress` = ?',
                     [req.body.emailAdress],
                     (err, rows, fields) => {
                         connection.release()
@@ -47,6 +47,7 @@ module.exports = {
                                 const payload = {
                                     userId: userinfo.id,
                                 }
+                                userinfo.isActive = userinfo.isActive ? true : false;
 
                                 jwt.sign(
                                     payload,
