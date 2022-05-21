@@ -347,9 +347,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200)
-                message.should.be.an('array').that.lengthOf(0);
+                result.should.be.an('array').that.lengthOf(0);
                 done();
             });
         });
@@ -359,9 +359,9 @@ describe("Manage Users /api/user",() => {
             })
             .end((err,res) => {
                 res.should.be.an("object")
-                let {status, message} = res.body;
+                let {status, result} = res.body;
                 status.should.equals(200)
-                message.should.be.an('array').that.lengthOf(2);
+                result.should.be.an('array').that.lengthOf(2);
                 done();
             });
         });
