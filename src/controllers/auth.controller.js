@@ -26,9 +26,9 @@ module.exports = {
                         connection.release()
                         if (err) {
                             logger.error('Error: ', err.toString())
-                            res.status(500).json({
-                                error: err.toString(),
-                                datetime: new Date().toISOString(),
+                            res.status(404).json({
+                                status: 404,
+                                message: err.message
                             })
                         }
                         if (rows) {
@@ -58,7 +58,7 @@ module.exports = {
                                             userinfo
                                         )
                                         res.status(200).json({
-                                            statusCode: 200,
+                                            status: 200,
                                             results: { ...userinfo, token },
                                         })
                                     }
@@ -67,10 +67,9 @@ module.exports = {
                                 logger.info(
                                     'User not found or password invalid'
                                 )
-                                res.status(401).json({
-                                    message:
-                                        'User not found or password invalid',
-                                    datetime: new Date().toISOString(),
+                                res.status(404).json({
+                                    status: 404,
+                                    message:'User not found or password invalid',
                                 })
                             }
                         }
@@ -82,19 +81,20 @@ module.exports = {
     validateLogin(req, res, next) {
         // Verify that we receive the expected input
         try {
-            assert(
-                typeof req.body.emailAdress === 'string',
-                'email must be a string.'
-            )
-            assert(
-                typeof req.body.password === 'string',
-                'password must be a string.'
-            )
+            assert(typeof req.body.emailAdress === 'string','email must be a string.')
+            assert(typeof req.body.password === 'string','password must be a string.')
+
+            //password contains min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+            assert.match(req.body.password, /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "Password must contain min. 8 characters which contains at least one lower- and uppercase letter, and one digit");
+            //emailAdress must be valid (found this regex online, not aware of all details)
+            assert.match(req.body.emailAdress, /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "The provided Emailadress format is invalid");
+
             next()
         } catch (ex) {
-            res.status(422).json({
-                error: ex.toString(),
-                datetime: new Date().toISOString(),
+            res.status(400).json({
+                status: 400,
+                message: ex.message,
+                // datetime: new Date().toISOString(),
             })
         }
     },

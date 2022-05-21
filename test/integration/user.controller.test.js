@@ -52,7 +52,7 @@ describe("Manage Users /api/user",() => {
         
         it("TC-201-1 When a required input is missing when creating a user, a valid error should be returned", (done) => {
             chai.request(server).post("/api/user").send({
-                //firstName ontbreekt
+                //firstName not present
                 lastName: "Rietveld",
                 street: "Van Wenastraat 31",
                 city: "Giessenburg",
@@ -414,6 +414,86 @@ describe("Manage Users /api/user",() => {
             });
         });
     });
+
+    describe("UC-101 Login /api/auth/login", () => {
+
+        it("TC-101-1 Required input missing when trying to login", (done) => {
+            chai.request(server).post("/api/auth/login").send({
+                emailAdress: "chevy@gmail.com"
+                //password not present
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(400)
+                message.should.be.a("string").that.equals("password must be a string.");
+                done();
+            });
+        })
+
+        it("TC-101-2 Invalid emailAdress when trying to login", (done) => {
+            chai.request(server).post("/api/auth/login").send({
+                emailAdress: "invalid",
+                password: "wvqOertE5"
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(400)
+                message.should.be.a("string").that.equals("The provided Emailadress format is invalid");
+                done();
+            });
+        })
+
+        it("TC-101-3 Invalid password when trying to login", (done) => {
+            chai.request(server).post("/api/auth/login").send({
+                emailAdress: "chevy@gmail.com",
+                password: "invalid"
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(400)
+                message.should.be.a("string").that.equals("Password must contain min. 8 characters which contains at least one lower- and uppercase letter, and one digit");
+                done();
+            });
+        })
+
+        it("TC-101-4 User thats trying to log in doesnt exist", (done) => {
+            chai.request(server).post("/api/auth/login").send({
+                //emailAdress doesnt exist in the database so user doesnt exist
+                emailAdress: "nonexistantemail@gmail.com",
+                password: "sjenUiicc2"
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, message} = res.body;
+                status.should.equals(404)
+                message.should.be.a("string").that.equals("User not found or password invalid");
+                done();
+            });
+        })
+
+        it("TC-101-5 User succesfully logged in", (done) => {
+            chai.request(server).post("/api/auth/login").send({
+                emailAdress: "chevy@gmail.com",
+                password: "wvqOertE5"
+            })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, results} = res.body;
+                status.should.equals(200)
+                assert.deepEqual(results, {
+                    emailAdress: 'chevy@gmail.com',
+                    firstName: 'Chevy',  
+                    id: 2,                                     
+                    lastName: 'Rietveld',                              
+                    token: results.token                                                
+                    })
+                done();
+            });
+        })
+    })
 
     describe("UC-206 Deleting a user /api/user", ()=> {
 
