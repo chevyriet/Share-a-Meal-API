@@ -21,13 +21,13 @@ router.all("/api/user/profile", authController.validateToken, userController.get
 router.post("/api/user", userController.validateUser, userController.addUser);
 
 //getting users by searchterm
-router.get("/api/user?name&isActive", userController.getAllUsers);
+router.get("/api/user?firstName&isActive", userController.getAllUsers);
 
 //getting a user by id
 router.get("/api/user/:userId", authController.validateToken, userController.getUserById);
 
 //deleting a user by id
-router.delete("/api/user/:userId", authController.validateToken, userController.deleteUser);
+router.delete("/api/user/:userId", authController.validateToken, authController.validateOwnershipUserDelete,userController.deleteUser);
 
 //updating a user by id
 router.put("/api/user/:userId", authController.validateToken, userController.validateUser, userController.validateUpdateUser, userController.updateUser);

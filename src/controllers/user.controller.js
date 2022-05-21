@@ -77,7 +77,7 @@ let controller={
         let query = 'SELECT * FROM user;';
         if(/\?.+/.test(req.url)){ //checks if the url has any query parameters
             const searchTerms = req.query;
-            const firstName = searchTerms.name
+            const firstName = searchTerms.firstName
             let isActive = searchTerms.isActive
             if(isActive != undefined){
                 if(isActive == "true"){
@@ -103,6 +103,9 @@ let controller={
                 if (error) throw error; 
                 connection.release();
                 logger.debug('Amount of results: ',results.length);
+                for (let i = 0; i < results.length; i++) {
+                    results[i].isActive = (results[i].isActive) ? true : false;
+                }
                 res.status(200).json({
                     status: 200,
                     result: results,

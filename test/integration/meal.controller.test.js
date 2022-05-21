@@ -124,10 +124,10 @@ describe("Manage Meals and Participations /api/meal", () => {
                 status.should.equals(201)
                 assert.deepEqual(result, {
                     id: 2,
-                    isActive : 1,
-                    isVega : 0,
-                    isVegan : 0,
-                    isToTakeHome : 1,
+                    isActive : true,
+                    isVega : false,
+                    isVegan : false,
+                    isToTakeHome : true,
                     dateTime: "2022-05-17T08:27:15.000Z",
                     maxAmountOfParticipants : 6,
                     price : 15.99, 
@@ -264,10 +264,10 @@ describe("Manage Meals and Participations /api/meal", () => {
                 status.should.equals(200)
                 assert.deepEqual(result, {
                     id: 2,
-                    isActive : 1,
-                    isVega : 0,
-                    isVegan : 0,
-                    isToTakeHome : 1,
+                    isActive : true,
+                    isVega : false,
+                    isVegan : false,
+                    isToTakeHome : true,
                     dateTime: "2022-05-17T08:27:15.000Z",
                     maxAmountOfParticipants : 6,
                     price : 14.45, 
@@ -356,10 +356,10 @@ describe("Manage Meals and Participations /api/meal", () => {
                 status.should.equals(200)
                 assert.deepEqual(result, {
                     id: 2,
-                    isActive : 1,
-                    isVega : 0,
-                    isVegan : 0,
-                    isToTakeHome : 1,
+                    isActive : true,
+                    isVega : false,
+                    isVegan : false,
+                    isToTakeHome : true,
                     dateTime: "2022-05-17T08:27:15.000Z",
                     maxAmountOfParticipants : 6,
                     price : 14.45, 

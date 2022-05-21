@@ -60,6 +60,12 @@ let controller = {
                     connection.query('SELECT * FROM meal ORDER BY createDate DESC LIMIT 1;', (err, results, field) => {
                         connection.release();
                         results[0].price = price
+
+                        results[0].isActive = meal.isActive ? true : false;
+                        results[0].isVega = meal.isVega ? true : false;
+                        results[0].isVegan = meal.isVegan ? true : false;
+                        results[0].isToTakeHome = meal.isToTakeHome ? true : false;
+
                         res.status(201).json({
                         status: 201,
                         result: results[0],
@@ -94,6 +100,13 @@ let controller = {
                 connection.release();
                 if(results.length > 0){
                     results[0].price = parseFloat(results[0].price)
+
+                    let meal = results[0];
+                    results[0].isActive = meal.isActive ? true : false;
+                    results[0].isVega = meal.isVega ? true : false;
+                    results[0].isVegan = meal.isVegan ? true : false;
+                    results[0].isToTakeHome = meal.isToTakeHome ? true : false;
+
                     res.status(200).json({
                     status: 200,
                     result: results[0],
@@ -121,6 +134,13 @@ let controller = {
                 if(results.affectedRows>0){
                     connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
                         results[0].price = price
+
+                        let meal = results[0];
+                        results[0].isActive = meal.isActive ? true : false;
+                        results[0].isVega = meal.isVega ? true : false;
+                        results[0].isVegan = meal.isVegan ? true : false;
+                        results[0].isToTakeHome = meal.isToTakeHome ? true : false;
+
                         res.status(200).json({
                             status: 200,
                             result: results[0],

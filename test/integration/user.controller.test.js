@@ -367,7 +367,7 @@ describe("Manage Users /api/user",() => {
         });
 
         it("TC-202-3 Search for non-existing name while getting all users", (done) => {
-            chai.request(server).get("/api/user?name=sjjhekgrgr").auth(token, { type: 'bearer' }).send({
+            chai.request(server).get("/api/user?firstName=sjjhekgrgr").auth(token, { type: 'bearer' }).send({
             })
             .end((err,res) => {
                 res.should.be.an("object")
@@ -403,7 +403,7 @@ describe("Manage Users /api/user",() => {
         });
 
         it("TC-202-6 Search for users with existing name as searchterm", (done) => {
-            chai.request(server).get("/api/user?name=Chevy").auth(token, { type: 'bearer' }).send({
+            chai.request(server).get("/api/user?firstName=Chevy").auth(token, { type: 'bearer' }).send({
             })
             .end((err,res) => {
                 res.should.be.an("object")
@@ -506,10 +506,12 @@ describe("Manage Users /api/user",() => {
             dbconnection.getConnection(function(err, connection) {
                 if (err) throw err;
                 connection.query('DELETE FROM user;', (error, result, field) => {
-                    connection.query('ALTER TABLE user AUTO_INCREMENT = 1;', (error, result, field) => {
+                    connection.query('ALTER TABLE user AUTO_INCREMENT = 2;', (error, result, field) => {
                         connection.query('INSERT INTO user (id, firstName, lastName, street, city, isActive, emailAdress, password, phoneNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);', [1, 'Mariëtte', 'van den Dullemen', 'Groenstraat 10', 'Rotterdam' , 1, 'm.vandullemen@server.nl', 'pfefejW41', '0687629321'], (error, result, field) => {
-                            connection.release();
-                            done();
+                            connection.query('INSERT INTO user (id, firstName, lastName, street, city, isActive, emailAdress, password, phoneNumber) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);', [47, 'Chevy', 'Rietveld', 'Groenstraat 10', 'Rotterdam' , 1, 'chevy@gmail.com', 'pfefejW41', '0687629321'], (error, result, field) => {
+                                connection.release();
+                                done();
+                            });
                         });
                     });
                 });
@@ -539,24 +541,24 @@ describe("Manage Users /api/user",() => {
             });
         });
 
-        // xit("TC-206-3 User is not the owner of the user they are trying to delete", (done) => {
-        //     chai.request(server).delete("/api/user/1")
-        //     .end((err,res) => {
-        //         res.should.be.an("object")
-        //         let {status, result} = res.body;
-        //         status.should.equals(401)
-        //         result.should.be.a("string").that.equals("Cant delete user, as you are not the owner of this user");
-        //         done();
-        //     });
-        // });
-
-        it("TC-206-4 User succesfully deleted", (done) => {
+        it("TC-206-3 User is not the owner of the user they are trying to delete", (done) => {
             chai.request(server).delete("/api/user/1").auth(token, { type: 'bearer' })
             .end((err,res) => {
                 res.should.be.an("object")
                 let {status, message} = res.body;
+                status.should.equals(403)
+                message.should.be.a("string").that.equals("User is not the owner");
+                done();
+            });
+        });
+
+        it("TC-206-4 User succesfully deleted", (done) => {
+            chai.request(server).delete("/api/user/47").auth(token, { type: 'bearer' })
+            .end((err,res) => {
+                res.should.be.an("object")
+                let {status, message} = res.body;
                 status.should.equals(200)
-                message.should.be.a("string").that.equals("User with ID 1 succesfully deleted");
+                message.should.be.a("string").that.equals("User with ID 47 succesfully deleted");
                 done();
             });
         });

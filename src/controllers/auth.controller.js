@@ -125,6 +125,37 @@ module.exports = {
             });
         });
     },
+    validateOwnershipUserDelete(req, res, next) {
+        const userId = req.userId;
+        const deletingUserId = req.params.userId;
+
+        dbconnection.getConnection(function (error, connection) {
+            if (error) throw error;
+            connection.query(
+                'SELECT * FROM user WHERE id=?',
+                [deletingUserId],
+                function (error, result, fields) {
+                    connection.release();
+                    if (error) throw error;
+
+                    logger.debug('result: ', result.length);
+
+                    if (result.length < 1) {
+                        next();
+                    } else {
+                        if (userId != deletingUserId) {
+                            res.status(403).json({
+                                status: 403,
+                                message: 'User is not the owner',
+                            });
+                        } else {
+                            next();
+                        }
+                    }
+                }
+            );
+        });
+    },
     validateToken(req, res, next) {
         logger.info('validateToken called')
         // logger.trace(req.headers)
