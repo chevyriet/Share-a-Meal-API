@@ -113,7 +113,7 @@ let controller={
             });
         });
     },
-    //UC-204: Get a single user by ID (doesnt return users meals aswell yet)
+    //UC-204: Get a single user by ID 
     getUserById:(req,res)=>{
         const userId = req.params.userId;
         logger.debug(`User with ID ${userId} requested`);
