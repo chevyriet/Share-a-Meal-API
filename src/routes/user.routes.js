@@ -24,15 +24,15 @@ router.post("/api/user", userController.validateUser, userController.addUser);
 router.get("/api/user?name&isActive", userController.getAllUsers);
 
 //getting a user by id
-router.get("/api/user/:userId", userController.getUserById);
+router.get("/api/user/:userId", authController.validateToken, userController.getUserById);
 
 //deleting a user by id
-router.delete("/api/user/:userId", userController.deleteUser);
+router.delete("/api/user/:userId", authController.validateToken, userController.deleteUser);
 
 //updating a user by id
-router.put("/api/user/:userId", userController.validateUser, userController.validateUpdateUser, userController.updateUser);
+router.put("/api/user/:userId", authController.validateToken, userController.validateUser, userController.validateUpdateUser, userController.updateUser);
 
 //getting all users
-router.get("/api/user/", userController.getAllUsers);
+router.get("/api/user/", authController.validateToken, userController.getAllUsers);
 
 module.exports = router;
