@@ -42,8 +42,9 @@ let controller = {
     //UC-301 Register a meal
     addMeal: (req,res) => {
         let meal = req.body;
-        let price = parseFloat(meal.price).toFixed(2)
         const cookId = req.userId
+        let price = parseFloat(meal.price)
+        console.log(price);
         let allergenes = req.body.allergenes.join();
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err;
@@ -58,6 +59,7 @@ let controller = {
                 } else {
                     connection.query('SELECT * FROM meal ORDER BY createDate DESC LIMIT 1;', (err, results, field) => {
                         connection.release();
+                        results[0].price = price
                         res.status(201).json({
                         status: 201,
                         result: results[0],
@@ -91,6 +93,7 @@ let controller = {
             connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
                 connection.release();
                 if(results.length > 0){
+                    results[0].price = parseFloat(results[0].price)
                     res.status(200).json({
                     status: 200,
                     result: results[0],
@@ -108,14 +111,16 @@ let controller = {
     updateMeal: (req, res) => {
         const mealId = req.params.mealId;
         const updateMeal = req.body;
+        let price = parseFloat(updateMeal.price)
         let updateAllergenes = req.body.allergenes.join()
         logger.debug(`Meal with ID ${mealId} requested to be updated`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.dateTime, updateMeal.imageUrl, updateAllergenes, updateMeal.maxAmountOfParticipants, updateMeal.price, mealId], function (error, results, fields) {
+            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.dateTime, updateMeal.imageUrl, updateAllergenes, updateMeal.maxAmountOfParticipants, price, mealId], function (error, results, fields) {
                 if(error) throw error
                 if(results.affectedRows>0){
                     connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {
+                        results[0].price = price
                         res.status(200).json({
                             status: 200,
                             result: results[0],
