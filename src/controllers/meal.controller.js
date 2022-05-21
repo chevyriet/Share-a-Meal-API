@@ -129,7 +129,7 @@ let controller = {
         logger.debug(`Meal with ID ${mealId} requested to be updated`);
         dbconnection.getConnection(function(err, connection) {
             if (err) throw err; 
-            connection.query('UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, datetime = ?, imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;', [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.dateTime, updateMeal.imageUrl, updateAllergenes, updateMeal.maxAmountOfParticipants, price, mealId], function (error, results, fields) {
+            connection.query(`UPDATE meal SET name = ?, description = ?, isActive = ?, isVega = ?, isVegan = ?, isToTakeHome = ?, dateTime = STR_TO_DATE(?, '%Y-%m-%dT%H:%i:%s.%fZ'), imageUrl = ?, allergenes = ?, maxAmountOfParticipants = ?, price = ? WHERE id = ?;`, [updateMeal.name, updateMeal.description, updateMeal.isActive, updateMeal.isVega, updateMeal.isVegan, updateMeal.isToTakeHome, updateMeal.dateTime, updateMeal.imageUrl, updateAllergenes, updateMeal.maxAmountOfParticipants, price, mealId], function (error, results, fields) {
                 if(error) throw error
                 if(results.affectedRows>0){
                     connection.query('SELECT * FROM meal WHERE id = ?;', [mealId], function (error, results, fields) {

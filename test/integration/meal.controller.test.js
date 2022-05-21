@@ -249,7 +249,7 @@ describe("Manage Meals and Participations /api/meal", () => {
                 isVega : 0,
                 isVegan : 0,
                 isToTakeHome : 1,
-                dateTime: "2022-05-17 08:27:15",
+                dateTime: "2022-05-17T08:27:15.000Z",
                 imageUrl : "https://google.com",
                 allergenes : [
                     "noten",
