@@ -17,14 +17,17 @@ An API written primarily in [Node.js](https://nodejs.org/en/), deployed on [Hero
     - [Used Frameworks/Libraries](#used-frameworks/libraries)
  - [Installation and Deployment](#installation-and-deployment)
     - [Running Locally](#running-locally)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+ - [Functionality](#functionality)
+    - [User](#user)
+    - [Meal](#meal)
+    - [Participate](#participate)
 
 
 ## About the API
 
 The Share-A-Meal API is an API that could support an application by offering functionality like creating, sharing, editing and deleting meals, with users also being able to participate in these meals (and remove themselves) and make use of these [**'CRUD'**](https://nl.wikipedia.org/wiki/CRUD) functionalities.
 
-Not only do the meals use these CRUD functionalities, the users do aswell (The API makes sure they only perform these CRUD functionalities on themselves, which we'll get into later).
+Not only do the meals use these CRUD functionalities, the users do aswell (The API makes sure they only perform these CRUD functionalities on themselves).
 
 Users are also able to login to their account after registering themselves, which gives them access to a big part of the functionality of the API. This is all made possible by using [jwt](https://jwt.io/introduction), who provide secure **jsonwebtokens**, handling a secure authentication.
 
@@ -58,7 +61,12 @@ To install the API:
 ```
 
 #### Running Locally
-To run the API locally on your **LocalHost** by running the following command:
+To run the API locally on your **LocalHost**:
+
+1. Start your **MySql** server on [**XAMPP**](https://www.apachefriends.org/index.html)
+
+2. Run the following command in your cmd while in the project directory:
+
 ```bash
   npm start
 ```
@@ -101,7 +109,7 @@ The response body after logging in. Copy the token and provide it in requests th
    "street": "string",
    "city": "string",
    "emailAdress": "string", //must be a valid email address 
-   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+   "password": "string", //Min 8 characters which contains at least one lower- & uppercase letter and one digit
 }  
 ```
 
@@ -110,7 +118,7 @@ User that is trying to get logged in must be an existing user.
 ```json
 {
    "emailAdress": "string", //must be a valid email address 
-   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+   "password": "string", //Min 8 characters which contains at least one lower- & uppercase letter and one digit
 }  
 ```
 
@@ -122,6 +130,8 @@ No JSON body required; Authorization Header must contain a Bearer Token
 ```
 
 #### Get all users
+This endpoint differentiates from the others as that it has an optional feature to include a search query. A user can search for other users based on **firstName**, and/or **isActive** by using this route: /api/user?{firstName}&{isActive}.
+
 User requesting this endpoint must be logged in. JSON response will contain multiple user objects 
 ```json
 No JSON body required; Authorization Header must contain a Bearer Token
@@ -143,7 +153,7 @@ User requesting this endpoint must be logged in. Authorization Header must conta
    "city": "string",
    "phoneNumber": "string", //must be a valid dutch phonenumber
    "emailAdress": "string", //must be a valid email address 
-   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+   "password": "string", //Min 8 characters which contains at least one lower- & uppercase letter and one digit
 } 
 ```
 
@@ -153,6 +163,81 @@ User requesting this endpoint must be logged in and be the owner of the user the
 No JSON body required; Authorization Header must contain a Bearer Token and url must contain user ID
 ```
 
+### Meal
+|Request Type|Endpoints|Description
+|---|---|---|
+|POST| /api/meal | Register a meal
+|GET| /api/meal | Get all meals
+|GET| /api/meal/{id} | Get a single meal by ID
+|PUT| /api/meal/{id} | Update a meal
+|DELETE| /api/meal/{id} | Delete a meal
+
+#### Register a meal
+User requesting this endpoint must be logged in. Authorization Header must contain a Bearer Token
+```json
+{
+   "name": "string",
+   "description": "string",
+   "isActive": "boolean",
+   "isVega": "boolean",
+   "isVegan": "boolean",
+   "isToTakeHome": "boolean",
+   "dateTime": "datetime",
+   "imageUrl": "string",
+   "allergenes": "string array",
+   "price":"number"
+}
+```
+
+#### Get all meals
+JSON response will contain multiple meal objects
+```json
+No JSON body required.
+```
+
+#### Get a single meal by ID
+JSON response will contain the user object of the specified meal
+```json
+No JSON body required; url must contain meal ID
+```
+
+#### Update a meal
+User requesting this endpoint must be logged in. Authorization Header must contain a Bearer Token
+```json
+{
+   "name": "string",
+   "description": "string",
+   "isActive": "boolean",
+   "isVega": "boolean",
+   "isVegan": "boolean",
+   "isToTakeHome": "boolean",
+   "dateTime": "datetime",
+   "maxAmountOfParticipants": "number",
+   "imageUrl": "string",
+   "allergenes": "string array",
+   "price":"number"
+}
+```
+
+#### Delete a meal
+User requesting this endpoint must be logged in and be the owner of the meal they are trying to delete.
+```json
+No JSON body required; Authorization Header must contain a Bearer Token and url must contain meal ID
+```
+
+### Participation
+|Request Type|Endpoints|Description
+|---|---|---|
+|GET| /api/meal/{id}/participate | Participate (or remove participation) in a meal
+
+#### Participate
+This endpoint differentiates from the others as it provides 2 different services, depending on if the user requesting it is already participated in the provided meal or not.
+If the user already is participated in the meal then the endpoint will remove their participation from that meal, if the user is not yet participated in the meal the endpoint will add one.
+
+User requesting this endpoint must be logged in. JSON response will contain information on the status of the participation and the amount of current participants in a meal.
+```json
+No JSON body required; Authorization Header must contain a Bearer Token and url must contain meal ID
+```
 
 
 
@@ -161,13 +246,8 @@ No JSON body required; Authorization Header must contain a Bearer Token and url 
 
 
 
-## Contributing
 
-Contributions are always welcome!
 
-See `contributing.md` for ways to get started.
-
-Please adhere to this project's `code of conduct`.
 
 
 
