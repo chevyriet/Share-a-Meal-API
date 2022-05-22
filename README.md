@@ -2,8 +2,10 @@
 # Share-A-Meal API 
 
 [![Deploy to Heroku](https://github.com/chevyriet/programmeren-4-shareameal/actions/workflows/main.yml/badge.svg)](https://github.com/chevyriet/programmeren-4-shareameal/actions/workflows)
-
 ![GitHub repo size](https://img.shields.io/github/repo-size/chevyriet/programmeren-4-shareameal?label=Total%20Size)
+![Github Language](https://img.shields.io/github/languages/top/chevyriet/programmeren-4-shareameal?color=informational)
+![Github Issues](https://img.shields.io/github/issues/chevyriet/programmeren-4-shareameal?label=Issues&color=informational)
+![Github Tests](https://img.shields.io/badge/Tests-100%25%20passed%2C%200%25%20failed-blue)
 
 An API written primarily in [Node.js](https://nodejs.org/en/), deployed on [Heroku](https://dashboard.heroku.com/)
 
@@ -14,6 +16,7 @@ An API written primarily in [Node.js](https://nodejs.org/en/), deployed on [Hero
     - [Author Information](#author-information)
     - [Used Frameworks/Libraries](#used-frameworks/libraries)
  - [Installation and Deployment](#installation-and-deployment)
+    - [Running Locally](#running-locally)
  - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
 
 
@@ -61,17 +64,98 @@ To run the API locally on your **LocalHost** by running the following command:
 ```
 
 
+## Functionality
+Listed below are the main functionalities the API offers, divided in **user**, **meal**, and **participation**, combined with an overview of their respective endpoints and the required [***json***](https://www.json.org/json-en.html) body that will need to be provided.
+
+Remember adding your own personal URL in front of the endpoints specified in the tables.
+
+Requests for endpoints that **require a user to be logged** in need to provide a valid **JWT / Bearer** Token in their **Authentication Header**, you can find this token at:
+
+The response body after logging in. Copy the token and provide it in requests that need a logged in user.
+
+```json
+{
+        ...
+        "street": "TestStreet 31",
+        "city": "TestCity",
+        "token": "invalidtokenCI6MTY1NDI1stb5qo0RTR0Vc"
+}
+```
+
+### User
+|Request Type|Endpoints|Description
+|---|---|---|
+|POST| /api/user | Register a user 
+|POST| /api/auth/login | Log an existing user in 
+|GET| /api/user/profile | Get personal user profile
+|GET| /api/user | Get all users
+|GET| /api/user/{id} | Get a single user by ID
+|PUT| /api/user/{id} | Update a user
+|DELETE| /api/user/{id} | Delete a user
+
+#### Register a user
+```json
+{
+   "firstName": "string",
+   "lastName": "string",
+   "street": "string",
+   "city": "string",
+   "emailAdress": "string", //must be a valid email address 
+   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+}  
+```
+
+#### Login
+User that is trying to get logged in must be an existing user.
+```json
+{
+   "emailAdress": "string", //must be a valid email address 
+   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+}  
+```
+
+#### Request personal user profile
+Requested profile must be one of a logged in user. JSON response will contain data of the requested user
+
+```json
+No JSON body required; Authorization Header must contain a Bearer Token
+```
+
+#### Get all users
+User requesting this endpoint must be logged in. JSON response will contain multiple user objects 
+```json
+No JSON body required; Authorization Header must contain a Bearer Token
+```
+
+#### Get a single user by ID
+User requesting this endpoint must be logged in. JSON response will contain the user object of the specified user 
+```json
+No JSON body required; Authorization Header must contain a Bearer Token and url must contain user ID
+```
+
+#### Update a user
+User requesting this endpoint must be logged in. Authorization Header must contain a Bearer Token and url must contain user ID
+```json
+{
+   "firstName": "string",
+   "lastName": "string",
+   "street": "string",
+   "city": "string",
+   "phoneNumber": "string", //must be a valid dutch phonenumber
+   "emailAdress": "string", //must be a valid email address 
+   "password": "string", //Min. 8 characters which contains at least one lower- and uppercase letter, and one digit
+} 
+```
+
+#### Delete a user
+User requesting this endpoint must be logged in and be the owner of the user they are trying to delete.
+```json
+No JSON body required; Authorization Header must contain a Bearer Token and url must contain user ID
+```
 
 
 
 
-## Badges
-
-Add badges from somewhere like: [shields.io](https://shields.io/)
-
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
-[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
-[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
 
 
 
@@ -84,5 +168,7 @@ Contributions are always welcome!
 See `contributing.md` for ways to get started.
 
 Please adhere to this project's `code of conduct`.
+
+
 
 
